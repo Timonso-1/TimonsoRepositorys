@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Timonso Repositories
 
-## Getting Started
+Portfolio page that lists the most recently updated public, non-fork GitHub repositories of a user.
+Built with Next.js (App Router), React and Tailwind CSS; GitHub is queried server-side and cached.
 
-First, run the development server:
+## Setup
 
 ```bash
+npm install
+cp .env.local.example .env.local.local   # then set GITHUB_USERNAME
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable                    | Required | Default | Purpose                                              |
+| --------------------------- | -------- | ------- | ---------------------------------------------------- |
+| `GITHUB_USERNAME`           | yes      | –       | User whose repositories are shown                    |
+| `GITHUB_TOKEN`              | no       | –       | Raises the API rate limit from 60 to 5000 requests/h |
+| `GITHUB_REPO_LIMIT`         | no       | `10`    | Number of repositories shown (1–100)                 |
+| `GITHUB_REVALIDATE_SECONDS` | no       | `3600`  | Cache lifetime of the GitHub response                |
+| `SITE_COPYRIGHT_HOLDER`     | no       | –       | Name in the footer copyright; hidden when empty      |
+| `SITE_SOURCE_URL`           | no       | –       | Source code link in footer and notice; hidden when empty |
+| `SITE_CONTACT_EMAIL`        | no       | –       | Contact email in the footer; hidden when empty       |
 
-## Learn More
+Variables are validated at startup in `lib/env.ts`; an invalid configuration fails the build with a clear message.
 
-To learn more about Next.js, take a look at the following resources:
+## Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/          page, loading skeleton, error boundary, layout
+components/   RepoCard and icons
+lib/          env validation, GitHub API client, language colors
+```
