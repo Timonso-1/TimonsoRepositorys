@@ -17,6 +17,7 @@ const envSchema = z.object({
     emptyToUndefined,
     z.coerce.number().int().min(0).default(3600),
   ),
+  SITE_TITLE: z.preprocess(emptyToUndefined, z.string().trim().default("Meine Projekte")),
   SITE_COPYRIGHT_HOLDER: z.preprocess(emptyToUndefined, z.string().trim().optional()),
   SITE_SOURCE_URL: z.preprocess(
     emptyToUndefined,
