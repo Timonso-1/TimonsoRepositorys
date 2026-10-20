@@ -1,5 +1,10 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import type { Org, RepoContribution } from "@/lib/github";
+
+const COLLAPSED_COUNT = 4;
 
 export function OrgContributions({
   orgs,
@@ -8,6 +13,9 @@ export function OrgContributions({
   orgs: Org[];
   repos: RepoContribution[];
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const shown = expanded ? repos : repos.slice(0, COLLAPSED_COUNT);
+
   return (
     <div className="space-y-6">
       {orgs.length > 0 && (
@@ -36,7 +44,7 @@ export function OrgContributions({
 
       {repos.length > 0 && (
         <ul className="grid gap-3 sm:grid-cols-2">
-          {repos.map((repo) => (
+          {shown.map((repo) => (
             <li key={repo.nameWithOwner}>
               <a
                 href={repo.url}
@@ -66,6 +74,17 @@ export function OrgContributions({
             </li>
           ))}
         </ul>
+      )}
+
+      {repos.length > COLLAPSED_COUNT && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="rounded-lg border border-line px-4 py-2 text-sm transition-colors hover:border-line-strong"
+        >
+          {expanded ? "Weniger anzeigen" : `Alle ${repos.length} anzeigen`}
+        </button>
       )}
     </div>
   );

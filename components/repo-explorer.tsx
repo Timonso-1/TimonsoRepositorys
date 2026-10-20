@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Pagination } from "@/components/pagination";
 import { RepoCard } from "@/components/repo-card";
 import type { Repo } from "@/lib/github";
 import { getLanguageColor } from "@/lib/languages";
@@ -13,12 +14,15 @@ const SORT_LABELS: Record<SortKey, string> = {
   name: "Name (A–Z)",
 };
 
+const PAGE_SIZE = 6;
+
 const chipBase = "rounded-full border px-3 py-1 text-xs transition-colors";
 
 export function RepoExplorer({ repos }: { repos: Repo[] }) {
   const [query, setQuery] = useState("");
   const [language, setLanguage] = useState<string | null>(null);
   const [sort, setSort] = useState<SortKey>("updated");
+  const [page, setPage] = useState(1);
 
   const languages = useMemo(
     () => [...new Set(repos.map((r) => r.language).filter((l): l is string => !!l))].sort(),
@@ -42,20 +46,30 @@ export function RepoExplorer({ repos }: { repos: Repo[] }) {
     });
   }, [repos, query, language, sort]);
 
+  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const pageItems = visible.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   return (
     <div>
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
         <input
           type="search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setPage(1);
+          }}
           placeholder="Projekte durchsuchen"
           aria-label="Projekte durchsuchen"
           className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm placeholder:text-muted focus:border-line-strong focus:outline-none sm:max-w-xs"
         />
         <select
           value={sort}
-          onChange={(e) => setSort(e.target.value as SortKey)}
+          onChange={(e) => {
+            setSort(e.target.value as SortKey);
+            setPage(1);
+          }}
           aria-label="Sortierung"
           className="rounded-lg border border-line bg-surface px-3 py-2 text-sm focus:border-line-strong focus:outline-none sm:ml-auto"
         >
@@ -71,7 +85,10 @@ export function RepoExplorer({ repos }: { repos: Repo[] }) {
         <div className="mb-6 flex flex-wrap gap-2" role="group" aria-label="Nach Sprache filtern">
           <button
             type="button"
-            onClick={() => setLanguage(null)}
+            onClick={() => {
+              setLanguage(null);
+              setPage(1);
+            }}
             aria-pressed={language === null}
             className={`${chipBase} ${
               language === null ? "border-fg bg-fg text-canvas" : "border-line text-muted hover:text-fg"
@@ -83,7 +100,10 @@ export function RepoExplorer({ repos }: { repos: Repo[] }) {
             <button
               key={lang}
               type="button"
-              onClick={() => setLanguage(language === lang ? null : lang)}
+              onClick={() => {
+                setLanguage(language === lang ? null : lang);
+                setPage(1);
+              }}
               aria-pressed={language === lang}
               className={`${chipBase} flex items-center gap-1.5 ${
                 language === lang
@@ -104,11 +124,14 @@ export function RepoExplorer({ repos }: { repos: Repo[] }) {
       {visible.length === 0 ? (
         <p className="text-muted">Keine Projekte für diese Auswahl gefunden.</p>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((repo) => (
-            <RepoCard key={repo.id} repo={repo} />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {pageItems.map((repo) => (
+              <RepoCard key={repo.id} repo={repo} />
+            ))}
+          </div>
+          <Pagination page={currentPage} pageCount={pageCount} onChange={setPage} />
+        </>
       )}
     </div>
   );
