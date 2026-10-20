@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
+import { env } from "@/lib/env";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Meine Projekte",
-  description: "Meine öffentlichen GitHub-Repositories",
+  title: env.SITE_TITLE,
+  description: "Öffentliche GitHub-Repositories, Beiträge und Aktivität",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

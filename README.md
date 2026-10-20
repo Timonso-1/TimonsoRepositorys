@@ -7,7 +7,7 @@ Built with Next.js (App Router), React and Tailwind CSS; GitHub is queried serve
 
 ```bash
 npm install
-cp .env.local.example .env.local.local   # then set GITHUB_USERNAME
+cp .env.example .env.local   # then set GITHUB_USERNAME
 npm run dev
 ```
 
