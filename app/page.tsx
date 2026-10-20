@@ -1,3 +1,4 @@
+import { AboutSection } from "@/components/about-section";
 import { ActivityFeed } from "@/components/activity-feed";
 import { ContributionHeatmap } from "@/components/contribution-heatmap";
 import { GitHubIcon } from "@/components/icons";
@@ -34,6 +35,10 @@ export default async function Page() {
           repoCount={repos.length}
           totalContributions={contributions?.total ?? null}
         />
+
+        <Section title="Über mich">
+          <AboutSection />
+        </Section>
 
         <Section title="Projekte">
           {repos.length === 0 ? (
