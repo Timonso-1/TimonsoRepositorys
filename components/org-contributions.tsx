@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { Pagination } from "@/components/pagination";
 import type { Org, RepoContribution } from "@/lib/github";
 
-const COLLAPSED_COUNT = 4;
+const PAGE_SIZE = 6;
 
 export function OrgContributions({
   orgs,
@@ -13,8 +14,10 @@ export function OrgContributions({
   orgs: Org[];
   repos: RepoContribution[];
 }) {
-  const [expanded, setExpanded] = useState(false);
-  const shown = expanded ? repos : repos.slice(0, COLLAPSED_COUNT);
+  const [page, setPage] = useState(1);
+  const pageCount = Math.max(1, Math.ceil(repos.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const shown = repos.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   return (
     <div className="space-y-6">
@@ -76,16 +79,7 @@ export function OrgContributions({
         </ul>
       )}
 
-      {repos.length > COLLAPSED_COUNT && (
-        <button
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          aria-expanded={expanded}
-          className="rounded-lg border border-line px-4 py-2 text-sm transition-colors hover:border-line-strong"
-        >
-          {expanded ? "Weniger anzeigen" : `Alle ${repos.length} anzeigen`}
-        </button>
-      )}
+      <Pagination page={currentPage} pageCount={pageCount} onChange={setPage} />
     </div>
   );
 }
