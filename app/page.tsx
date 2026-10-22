@@ -2,6 +2,7 @@ import { AboutSection } from "@/components/about-section";
 import { ActivityFeed } from "@/components/activity-feed";
 import { ContributionHeatmap } from "@/components/contribution-heatmap";
 import { GitHubIcon } from "@/components/icons";
+import { LanguageBar } from "@/components/language-bar";
 import { OrgContributions } from "@/components/org-contributions";
 import { ProfileHero } from "@/components/profile-hero";
 import { RepoExplorer } from "@/components/repo-explorer";
@@ -34,10 +35,15 @@ export default async function Page() {
           profile={profile}
           repoCount={repos.length}
           totalContributions={contributions?.total ?? null}
+          lastActive={repos.map((r) => r.pushed_at).sort().at(-1) ?? null}
         />
 
         <Section title="Über mich">
           <AboutSection />
+        </Section>
+
+        <Section title="Sprachen" hint="Hauptsprache pro Repository">
+          <LanguageBar repos={repos} />
         </Section>
 
         <Section title="Projekte">
