@@ -18,6 +18,10 @@ const envSchema = z.object({
     z.coerce.number().int().min(0).default(3600),
   ),
   SITE_TITLE: z.preprocess(emptyToUndefined, z.string().trim().default("Meine Projekte")),
+  SITE_URL: z.preprocess(
+    emptyToUndefined,
+    z.url({ protocol: /^https?$/, error: "SITE_URL must be an http(s) URL" }).optional(),
+  ),
   SITE_COPYRIGHT_HOLDER: z.preprocess(emptyToUndefined, z.string().trim().optional()),
   SITE_SOURCE_URL: z.preprocess(
     emptyToUndefined,
