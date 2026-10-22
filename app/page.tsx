@@ -28,7 +28,7 @@ export default async function Page() {
   const orgRepos = (contributions?.repos ?? []).filter((r) => r.ownerLogin !== getUsername());
 
   return (
-    <main className="flex-1 px-4 py-12 sm:px-8">
+    <main id="main" className="flex-1 px-4 py-12 sm:px-8">
       <div className="mx-auto max-w-6xl">
         <ProfileHero
           profile={profile}

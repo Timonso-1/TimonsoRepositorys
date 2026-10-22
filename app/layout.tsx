@@ -14,9 +14,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const DESCRIPTION = "Öffentliche GitHub-Repositories, Beiträge und Aktivität";
+
 export const metadata: Metadata = {
+  metadataBase: env.SITE_URL ? new URL(env.SITE_URL) : undefined,
   title: env.SITE_TITLE,
-  description: "Öffentliche GitHub-Repositories, Beiträge und Aktivität",
+  description: DESCRIPTION,
+  alternates: env.SITE_URL ? { canonical: "/" } : undefined,
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    siteName: env.SITE_TITLE,
+    title: env.SITE_TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: { card: "summary_large_image", title: env.SITE_TITLE, description: DESCRIPTION },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -26,6 +38,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-canvas font-sans text-fg">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-fg focus:px-3 focus:py-2 focus:text-sm focus:text-canvas"
+        >
+          Zum Inhalt springen
+        </a>
         <div className="flex flex-1 flex-col">{children}</div>
         <SiteFooter />
       </body>
