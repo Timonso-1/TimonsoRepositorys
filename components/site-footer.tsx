@@ -17,6 +17,9 @@ export function SiteFooter() {
           </p>
         )}
         <div className="flex flex-col items-center gap-4 sm:ml-auto sm:flex-row sm:gap-6">
+          <a href="#main" className={linkClassName}>
+            <span className={labelClassName}>Nach oben</span>
+          </a>
           {env.SITE_SOURCE_URL && (
             <a
               href={env.SITE_SOURCE_URL}
