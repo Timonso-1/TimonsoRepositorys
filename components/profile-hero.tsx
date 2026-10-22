@@ -3,13 +3,14 @@ import { GitHubIcon } from "@/components/icons";
 import type { Profile } from "@/lib/github";
 import { getProfileUrl, getUsername } from "@/lib/github";
 import { env } from "@/lib/env";
+import { formatDate } from "@/lib/format";
 
-function Stat({ value, label }: { value: number; label: string }) {
+function Stat({ value, label }: { value: number | string; label: string }) {
   return (
     <div>
       <dt className="text-xs uppercase tracking-wider text-muted">{label}</dt>
       <dd className="mt-0.5 text-xl font-semibold tabular-nums">
-        {value.toLocaleString("de-DE")}
+        {typeof value === "number" ? value.toLocaleString("de-DE") : value}
       </dd>
     </div>
   );
@@ -19,10 +20,12 @@ export function ProfileHero({
   profile,
   repoCount,
   totalContributions,
+  lastActive,
 }: {
   profile: Profile | null;
   repoCount: number;
   totalContributions: number | null;
+  lastActive: string | null;
 }) {
   const username = getUsername();
 
@@ -59,6 +62,8 @@ export function ProfileHero({
           <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-3">
             <Stat value={repoCount} label="Projekte" />
             {profile && <Stat value={profile.followers} label="Follower" />}
+            {profile && <Stat value={new Date(profile.created_at).getUTCFullYear()} label="Auf GitHub seit" />}
+            {lastActive && <Stat value={formatDate(lastActive)} label="Zuletzt aktiv" />}
             {totalContributions !== null && (
               <Stat value={totalContributions} label="Beiträge (12 Monate)" />
             )}
