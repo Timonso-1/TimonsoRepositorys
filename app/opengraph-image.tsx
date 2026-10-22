@@ -37,7 +37,7 @@ export default async function OpengraphImage() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 76, fontWeight: 700, letterSpacing: -2 }}>{env.SITE_TITLE}</div>
           <div style={{ marginTop: 16, fontSize: 34, color: "#a3a3a3" }}>
-            GitHub-Projekte von @{getUsername()}
+            {`GitHub-Projekte von @${getUsername()}`}
           </div>
         </div>
       </div>
